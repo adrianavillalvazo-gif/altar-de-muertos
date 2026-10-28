@@ -154,8 +154,10 @@ textarea{resize:vertical;min-height:84px}
 @media (max-aspect-ratio:1/1){.credito-altar{max-width:60vw}}
 .qr{flex:0 0 auto;margin:0;
   background:#fbf3dc;color:#3a1630;border-radius:14px;padding:10px 10px 8px;display:grid;justify-items:center;gap:6px;box-shadow:0 0 0 4px var(--cempa),0 10px 30px #0008}
-.qr #qr-codigo,.qr #qr-codigo img,.qr #qr-codigo canvas{width:clamp(84px,13vh,150px);height:clamp(84px,13vh,150px);display:block}
-.qr figcaption{font-size:clamp(.7rem,1.3vh,.95rem);font-weight:600;text-align:center;line-height:1.25}
+#qr-codigo{width:clamp(64px,9vh,110px);height:clamp(64px,9vh,110px);overflow:hidden}
+#qr-codigo img,#qr-codigo canvas,#qr-codigo table{width:100%!important;height:100%!important;max-width:100%;display:block}
+.qr{padding:7px 7px 6px!important;border-radius:10px!important;box-shadow:0 0 0 3px var(--cempa),0 8px 20px #0007!important}
+.qr figcaption{max-width:12em;font-size:clamp(.6rem,1.05vh,.8rem);font-weight:600;text-align:center;line-height:1.25}
 .qr-texto{font-size:.7rem;overflow-wrap:anywhere;max-width:160px}
 @media (max-aspect-ratio:1/1){.qr{display:none}}
 .foto-botones{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:-6px}
