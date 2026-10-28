@@ -1,6 +1,6 @@
 # Altar de Muertos Virtual (sitio propio)
 
-© 2026 Adriana Villalvazo · División de Artes y Humanidades, CUAAD, Universidad de Guadalajara. Todos los derechos reservados.
+© 2026 Adriana Villalvazo · Delegación de Artes y Humanidades, STAUdG. Todos los derechos reservados.
 
 - `index.html`: el altar completo. Al abrirlo se ve el formulario; con `#altar` al final de la dirección, la pasarela del proyector.
 - `config.js`: dirección y llave pública del proyecto de Supabase.
