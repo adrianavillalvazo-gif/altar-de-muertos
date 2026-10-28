@@ -85,6 +85,7 @@ textarea{resize:vertical;min-height:84px}
 .aviso{font-size:.92rem;color:var(--tenue);margin:0}
 .aviso.error{color:#ff8fb5}
 .aviso.ok{color:var(--cempa-claro)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 .lista h2{font-size:1.5rem;margin-bottom:6px}
 .lista .conteo{color:var(--tenue);margin:0 0 16px}
 .tarjetas{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:14px}
@@ -194,6 +195,38 @@ textarea{resize:vertical;min-height:84px}
 .mis-platillos .nota{margin:0;color:var(--tenue);font-size:.88rem}
 .platillo{display:grid;grid-template-columns:76px minmax(0,1fr);gap:12px;align-items:center}
 .foto-plato{width:76px;max-width:76px;aspect-ratio:1/1;border-radius:50%;font-size:.8rem}
+/* entrada: portada con un solo botón y formulario por pasos */
+.portada{min-height:calc(100svh - 150px);display:grid;align-content:center;justify-items:center;text-align:center;gap:clamp(18px,3.5vh,30px);padding-block:12px 24px}
+.portada h1{font-size:clamp(2.4rem,9vw,4.4rem);line-height:1;color:var(--cempa-claro)}
+.portada .sub{margin:0;color:var(--tenue);max-width:34ch;font-size:1.08rem}
+.pasos-guia{list-style:none;margin:0;padding:0;display:grid;gap:12px;text-align:left;width:min(100%,24rem)}
+.pasos-guia li{display:grid;grid-template-columns:44px minmax(0,1fr);gap:14px;align-items:center;font-size:1.05rem}
+.pasos-guia b{display:grid;place-items:center;width:44px;height:44px;border-radius:50%;background:var(--noche-2);border:2px solid var(--cempa);color:var(--cempa-claro);font-family:var(--display);font-weight:400;font-size:1.3rem}
+.btn-grande{font-size:1.2rem;padding:18px 34px;box-shadow:0 0 0 4px color-mix(in srgb,var(--cempa) 30%,transparent),0 12px 30px #0008}
+.portada .discreto{font-size:.88rem;color:var(--tenue)}
+.portada .discreto a{color:var(--cempa-claro)}
+.progreso{display:grid;gap:8px}
+.progreso .barra{height:8px;border-radius:99px;background:var(--noche);overflow:hidden;border:1px solid var(--linea)}
+.progreso .barra i{display:block;height:100%;width:25%;background:linear-gradient(90deg,var(--rosa),var(--cempa));transition:width .4s ease}
+.progreso span{font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;color:var(--cempa-claro)}
+.paso{display:grid;gap:18px;min-width:0}
+.paso > h2{font-size:clamp(1.5rem,5.5vw,2rem);line-height:1.1}
+.paso > .guia{margin:-8px 0 0;color:var(--tenue)}
+.paso .foto-caja{max-width:240px;justify-self:center}
+.paso .foto-botones{justify-content:center;margin-top:0}
+.nav-pasos{display:flex;gap:12px;justify-content:space-between;align-items:center;margin-top:4px}
+.nav-pasos .btn-principal{margin-left:auto;font-size:1.05rem;padding:14px 28px}
+.listo{display:grid;justify-items:center;text-align:center;gap:14px;background:var(--noche-2);border:1px solid var(--linea);border-radius:18px;padding:28px 22px}
+.listo .eti{font-size:.85rem;letter-spacing:.16em;text-transform:uppercase;color:var(--cempa-claro)}
+.listo .num{font-family:var(--display);font-size:clamp(4.5rem,22vw,7rem);line-height:.9;color:var(--cempa-claro)}
+.listo p{margin:0;max-width:32ch;font-size:1.08rem}
+.listo .cuenta{font-size:1.6rem;font-variant-numeric:tabular-nums;color:var(--texto);font-weight:600}
+.creditos .organiza{display:flex;flex-wrap:wrap;gap:6px 14px}
+.creditos .organiza a{color:var(--tenue)}
+/* aviso para pasar a pantalla completa en el proyector */
+.entrar-completa{position:absolute;inset:0;z-index:6;display:grid;place-items:center;background:color-mix(in srgb,var(--noche) 55%,transparent);border:0;color:var(--texto);cursor:pointer;font:inherit}
+.entrar-completa span{background:var(--noche-2);border:2px solid var(--cempa);border-radius:18px;padding:18px 28px;font-size:clamp(1rem,2vw,1.4rem);font-weight:600;display:grid;gap:4px;text-align:center}
+.entrar-completa small{font-weight:400;color:var(--tenue);font-size:.8em}
 </style>
 </head>
 <body>
@@ -201,24 +234,35 @@ textarea{resize:vertical;min-height:84px}
 <section id="vista-ofrenda">
   <div class="picado" aria-hidden="true" id="picado-ofrenda"></div>
   <div class="envoltura">
-    <header class="cabecera">
-      <div>
-        <h1>Pon tu ofrenda</h1>
-        <p>Sube la foto de tu ser querido o personaje, dinos qué le gustaba comer y aparecerá en el altar proyectado.</p>
-        <span class="modo" id="modo">Conectando…</span>
-      </div>
-      <div class="enlaces"><a class="btn btn-secundario" href="#pantalla">Pantalla del evento ▸</a><a class="btn btn-secundario" href="#altar">Altar completo ▸</a></div>
-    </header>
+    <div class="portada" id="portada">
+      <h1>Altar de Muertos</h1>
+      <p class="sub">Pon en el altar a quien recuerdas: su foto, lo que le gustaba y unas palabras.</p>
+      <ol class="pasos-guia">
+        <li><b>1</b><span>Sube su foto</span></li>
+        <li><b>2</b><span>Cuéntanos quién era y qué le gustaba</span></li>
+        <li><b>3</b><span>Recibe tu turno y mírala en la pantalla</span></li>
+      </ol>
+      <button class="btn btn-principal btn-grande" id="empezar" type="button">Poner una ofrenda</button>
+      <p class="discreto">Toma unos 3 minutos. No necesitas cuenta. · <a href="#altar">Ver el altar</a></p>
+      <span class="modo" id="modo" hidden>Conectando…</span>
+    </div>
     <div class="rejilla">
-      <form id="form" novalidate>
-        <label class="campo">Foto
+      <form id="form" novalidate hidden>
+        <div class="progreso" aria-live="polite"><span id="paso-txt">Paso 1 de 4</span><div class="barra"><i id="paso-barra"></i></div></div>
+        <div class="paso" data-paso="1">
+        <h2>¿A quién recuerdas?</h2>
+        <p class="guia">Sube su foto. Puede ser una foto del celular o una foto de un retrato impreso.</p>
+        <label class="campo"><span class="sr">Foto</span>
           <span class="foto-caja" id="foto-caja"><span id="foto-texto">Toca para tomar o elegir una foto</span>
             <input type="file" id="foto" accept="image/*"></span>
         </label>
         <div class="foto-botones">
           <label class="btn btn-secundario btn-chico">Tomar foto con la cámara<input type="file" id="foto-cam" accept="image/*" capture="environment" hidden></label>
-          <span class="nota-foto">También puedes fotografiar un retrato impreso.</span>
         </div>
+        </div>
+        <div class="paso" data-paso="2" hidden>
+        <h2>¿Quién era?</h2>
+        <p class="guia">Solo el nombre es obligatorio.</p>
         <label class="campo">Nombre
           <input type="text" id="nombre" maxlength="60" placeholder="Ej. Abuelita Chela" required>
         </label>
@@ -231,6 +275,10 @@ textarea{resize:vertical;min-height:84px}
         <label class="campo">De dónde era <small>opcional</small>
           <input type="text" id="origen" maxlength="60" placeholder="Ej. Ameca, Jalisco">
         </label>
+        </div>
+        <div class="paso" data-paso="3" hidden>
+        <h2>¿Qué le gustaba?</h2>
+        <p class="guia">Toca lo que le gustaba comer, beber o los dulces. Todo es opcional.</p>
         <div class="campo" style="display:grid;gap:8px">
           <label for="comidas" style="font-weight:600">Comidas favoritas <small style="font-weight:400;color:var(--tenue)">elige del menú o escribe otras separadas por comas</small></label>
           <div class="chips" id="chips"></div>
@@ -249,8 +297,12 @@ textarea{resize:vertical;min-height:84px}
         <label class="campo">Mensaje <small>opcional</small>
           <textarea id="mensaje" maxlength="220" placeholder="Unas palabras para recordarle"></textarea>
         </label>
+        </div>
+        <div class="paso" data-paso="4" hidden>
+        <h2>¿Quién pone la ofrenda?</h2>
+        <p class="guia">Tu nombre aparece junto a la ofrenda.</p>
         <fieldset class="quien-pone">
-          <legend>Quién pone la ofrenda</legend>
+          <legend>Tú</legend>
           <label class="campo">Tu nombre
             <input type="text" id="autor" maxlength="60" placeholder="Ej. Ana López" required>
           </label>
@@ -270,16 +322,29 @@ textarea{resize:vertical;min-height:84px}
           </div>
         </details>
         <label class="acepto"><input type="checkbox" id="acepto"> <span>Leí y acepto el aviso de privacidad, y autorizo que esta ofrenda se muestre en el altar.</span></label>
-        <button class="btn btn-principal" id="enviar" type="submit">Poner en el altar</button>
+        </div>
         <p class="aviso" id="aviso" role="status"></p>
+        <div class="nav-pasos">
+          <button class="btn btn-secundario" id="atras" type="button">‹ Atrás</button>
+          <button class="btn btn-principal" id="enviar" type="submit">Siguiente ›</button>
+        </div>
       </form>
-      <section class="lista" aria-labelledby="t-lista">
+      <div class="listo" id="listo" hidden>
+        <span class="eti">Tu turno</span>
+        <span class="num" id="listo-num">--</span>
+        <p id="listo-txt"></p>
+        <span class="cuenta" id="listo-cuenta"></span>
+        <p class="aviso" id="listo-regreso"></p>
+        <button class="btn btn-secundario" id="otra" type="button">Poner otra ofrenda</button>
+      </div>
+      <section class="lista" id="lista" aria-labelledby="t-lista" hidden>
         <h2 id="t-lista">En el altar</h2>
         <p class="conteo" id="conteo"></p>
         <div class="tarjetas" id="tarjetas"></div>
       </section>
     </div>
     <footer class="creditos">
+      <p class="organiza"><a href="#pantalla">Pantalla del evento</a><a href="#altar">Altar completo</a></p>
       <p><strong>Altar de Muertos Virtual</strong> · Idea y creación: Adriana Villalvazo · Delegación de Artes y Humanidades, STAUdG · 2026</p>
       <p>© 2026 Adriana Villalvazo. Todos los derechos reservados. Uso reservado: prohibida su reproducción, copia o uso comercial sin autorización de la autora. Las fotos y textos de cada ofrenda pertenecen a quien los comparte. <a href="#ofrenda" id="ver-aviso" style="color:var(--cempa-claro)">Aviso de privacidad</a></p>
     </footer>
@@ -294,6 +359,7 @@ textarea{resize:vertical;min-height:84px}
     <button class="btn" id="pantalla" type="button">Pantalla completa</button>
     <a class="btn" href="#ofrenda">Agregar ofrenda</a>
   </div>
+  <button class="entrar-completa" id="entrar-completa" type="button" hidden><span>Toca para ver en pantalla completa<small>Así se oculta la barra del navegador</small></span></button>
   <div class="escena" id="escena"></div>
   <div class="desfile" id="desfile" aria-hidden="true"></div>
   <div class="turnos"><div class="caja">
@@ -420,26 +486,56 @@ textarea{resize:vertical;min-height:84px}
     clearInterval(reloj);
     const paso = () => {
       const lista = ofrendas.some(x => x.creado === nueva.creado && x.nombre === nueva.nombre) ? ofrendas : [...ofrendas, nueva];
-      const p = programa(lista).find(x => x.o.creado === nueva.creado && x.o.nombre === nueva.nombre);
-      const falta = p ? p.ini - Date.now() : 0;
-      const prog = programa(lista), n = prog.length, turno = p ? turnoDe(prog, p) : "";
+      const prog = programa(lista), n = prog.length;
+      const p = prog.find(x => x.o.creado === nueva.creado && x.o.nombre === nueva.nombre);
+      const falta = p ? p.ini - Date.now() : 0, turno = p ? turnoDe(prog, p) : "";
       const vuelta = Math.round(n * rota(n) / 60e3);
       const regreso = n > 1 ? " Después vuelve a aparecer aprox. cada " + (vuelta >= 1 ? vuelta + " min" : dura(n * rota(n))) + "." : "";
-      if (falta <= 0){ clearInterval(reloj); aviso("Turno " + turno + ": ¡" + nueva.nombre + " ya está en el altar! Mírala en la pantalla." + regreso, "ok"); return; }
-      aviso("¡Listo! Tu turno es el " + turno + ". " + nueva.nombre + " aparece a las " + hora(p.ini) + ", en " + dura(falta) + ". Acércate a la pantalla." + regreso, "ok");
+      if (paso !== 5) irA(5);
+      $("listo-num").textContent = turno || "--"; $("listo-regreso").textContent = regreso.trim();
+      if (falta <= 0){ clearInterval(reloj); $("listo-txt").textContent = "¡" + nueva.nombre + " ya está en el altar! Mírala en la pantalla."; $("listo-cuenta").textContent = ""; return; }
+      $("listo-txt").textContent = "Acércate al altar: " + nueva.nombre + " sale en la pantalla a las " + hora(p.ini);
+      $("listo-cuenta").textContent = "Faltan " + dura(falta);
     };
     paso(); reloj = setInterval(paso, 1000);
   }
+
+  // pasos del formulario
+  let paso = 0;
+  const TOTAL = 4;
+  function irA(n){
+    paso = n;
+    $("portada").hidden = n !== 0; $("form").hidden = !(n >= 1 && n <= TOTAL); $("listo").hidden = n !== 5;
+    $("lista").hidden = n === 0;
+    document.querySelectorAll(".paso").forEach(p => p.hidden = +p.dataset.paso !== n);
+    if (n >= 1 && n <= TOTAL){
+      $("paso-txt").textContent = "Paso " + n + " de " + TOTAL;
+      $("paso-barra").style.width = (n / TOTAL * 100) + "%";
+      $("enviar").textContent = n === TOTAL ? "Poner en el altar" : "Siguiente ›";
+      $("atras").textContent = n === 1 ? "‹ Inicio" : "‹ Atrás";
+      if (!$("enviar").disabled) aviso("");
+    }
+    scrollTo({top:0, behavior:"smooth"});
+  }
+  function pasoValido(n){
+    if (n === 1 && !fotoDato){ aviso("Falta la foto. Toca el recuadro para elegir una.", "error"); return false; }
+    if (n === 2 && !$("nombre").value.trim()){ aviso("Escribe el nombre de quien recordamos.", "error"); $("nombre").focus(); return false; }
+    return true;
+  }
+  $("empezar").onclick = () => irA(1);
+  $("atras").onclick = () => irA(paso - 1);
+  $("otra").onclick = () => { clearInterval(reloj); irA(1); };
 
   function aviso(t, tipo){ const a=$("aviso"); a.textContent=t; a.className="aviso"+(tipo?" "+tipo:""); }
 
   // guardar
   $("form").addEventListener("submit", async e => {
     e.preventDefault();
+    if (paso < TOTAL){ if (pasoValido(paso)) irA(paso + 1); return; }
     const nombre = $("nombre").value.trim();
-    if (!fotoDato) return aviso("Falta la foto. Toca el recuadro para elegir una.", "error");
-    if (!nombre) return aviso("Escribe el nombre de quien recordamos.", "error");
-    if (!$("autor").value.trim()) return aviso("Escribe tu nombre en “Quién pone la ofrenda”.", "error");
+    if (!fotoDato){ irA(1); return aviso("Falta la foto. Toca el recuadro para elegir una.", "error"); }
+    if (!nombre){ irA(2); return aviso("Escribe el nombre de quien recordamos.", "error"); }
+    if (!$("autor").value.trim()){ $("autor").focus(); return aviso("Escribe tu nombre.", "error"); }
     if (!$("acepto").checked) return aviso("Para guardar, marca la casilla de aceptación del aviso de privacidad.", "error");
     const o = { nombre, anios:$("anios").value.trim(), quienFue:$("quienFue").value.trim(), origen:$("origen").value.trim(), autor:$("autor").value.trim(), relacion:$("relacion").value.trim(), comidas:leerComidas().slice(0,14), mensaje:$("mensaje").value.trim(), foto:fotoDato, platillos:leerPlatillos(), creado:Date.now() };
     $("enviar").disabled = true; aviso("Poniendo la ofrenda…");
@@ -459,7 +555,9 @@ textarea{resize:vertical;min-height:84px}
     } finally { $("enviar").disabled = false; }
   });
 
-  $("ver-aviso").addEventListener("click", e => { e.preventDefault(); const d=$("aviso-privacidad"); d.open=true; d.scrollIntoView({behavior:"smooth",block:"center"}); });
+  // el estado de conexión solo se ve si hay un problema
+  new MutationObserver(() => { $("modo").hidden = !/Sin conexión|local/.test($("modo").textContent); }).observe($("modo"), {childList:true, characterData:true, subtree:true});
+  $("ver-aviso").addEventListener("click", e => { e.preventDefault(); if (paso !== 4) irA(4); const d=$("aviso-privacidad"); d.open=true; d.scrollIntoView({behavior:"smooth",block:"center"}); });
 
   function leerLocal(){ try { return JSON.parse(localStorage.getItem(LLAVE)||"[]"); } catch { return []; } }
 
@@ -818,6 +916,10 @@ textarea{resize:vertical;min-height:84px}
   }
   addEventListener("hashchange", ruta);
   ruta();
+  // en proyección, el primer toque pasa a pantalla completa (oculta la barra con la dirección)
+  const completa = () => { $("entrar-completa").hidden = !!document.fullscreenElement || location.hash !== "#pantalla" || !document.documentElement.requestFullscreen; };
+  addEventListener("hashchange", completa); document.addEventListener("fullscreenchange", completa); completa();
+  $("entrar-completa").onclick = async () => { try { await document.documentElement.requestFullscreen(); } catch {} completa(); };
 
   // datos: en línea con Supabase (cualquiera sube sin cuenta); si no está configurado, solo en este dispositivo
   function usarLocal(){
